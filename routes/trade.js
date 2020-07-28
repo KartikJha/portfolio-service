@@ -29,16 +29,6 @@ router.post("/", (req, res) =>
     if (isEmpty(errors)) {
       return sendResponse(res, 201, messages.TRADE_PLACED, {}, [], value);
     }
-    // if (errors[0] === messages.USER_ALREADY_EXISTS) {
-    //   return sendResponse(
-    //     res,
-    //     400,
-    //     messages.USER_ALREADY_EXISTS,
-    //     {},
-    //     [],
-    //     value
-    //   );
-    // }
     return sendResponse(res, 500, messages.UNKNOWN_ERROR, {}, errors, {});
   })(req, res)
 );

@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/v1/trades", tradeRouter);
 app.use('/v1/stocks', stocksRouter);
 app.use('/v1/portfolios', portfolioRouter)

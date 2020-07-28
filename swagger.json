@@ -6,11 +6,51 @@
   },
   "basePath": "/v1",
   "schemes": ["http", "https"],
-  "path": {
-    "/trades": {
-			"post": {
-				"description": "fetches all the trades in a paginated manner"
-			}
-		}
+  "paths": {
+    "/v1/trades": {
+      "post": {
+        "operationId": "addTradesV1",
+        "description": "Adds a trade",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "requestBody": {
+          "requried": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Trade"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Trade added successfully"
+          },
+          "500": {
+            "description": "Either validation error occured or server failed"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Trade": {
+        "type": "object",
+        "properties": {
+          "userId": "string",
+          "stockId": "string",
+          "quantity": "integer",
+          "type": "string",
+          "portfolioId": "string",
+          "price": "integer"
+        }
+      }
+    }
   }
 }
