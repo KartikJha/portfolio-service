@@ -12,33 +12,33 @@ router.get("/", (req, res) =>
     [],
     messages.FAILED_TO_FETCH_USERS
   )(async (req, res) => {
-    const { value, errors } = await tradeService.getUsers(req.query);
-    if (isEmpty(errors)) {
-      return sendResponse(res, 200, messages.SUCCESS, {}, [], value);
-    }
-    return sendResponse(res, 400, messages.SUCCESS, {}, errors, []);
+    // const { value, errors } = await tradeService.addTrade(req.query);
+    // if (isEmpty(errors)) {
+    //   return sendResponse(res, 200, messages.SUCCESS, {}, [], value);
+    // }
+    // return sendResponse(res, 400, messages.SUCCESS, {}, errors, []);
   })(req, res)
 );
 
 router.post("/", (req, res) =>
   withFailSafe(
-    {},
-    messages.USER_CREATION_FAILED
+    null,
+    messages.TRADE_FAILED
   )(async (req, res) => {
-    const { value, errors } = await tradeService.saveUser(req.body);
+    const { value, errors } = await tradeService.addTrade(req.body);
     if (isEmpty(errors)) {
-      return sendResponse(res, 201, messages.USER_CREATED, {}, [], value);
+      return sendResponse(res, 201, messages.TRADE_PLACED, {}, [], value);
     }
-    if (errors[0] === messages.USER_ALREADY_EXISTS) {
-      return sendResponse(
-        res,
-        400,
-        messages.USER_ALREADY_EXISTS,
-        {},
-        [],
-        value
-      );
-    }
+    // if (errors[0] === messages.USER_ALREADY_EXISTS) {
+    //   return sendResponse(
+    //     res,
+    //     400,
+    //     messages.USER_ALREADY_EXISTS,
+    //     {},
+    //     [],
+    //     value
+    //   );
+    // }
     return sendResponse(res, 500, messages.UNKNOWN_ERROR, {}, errors, {});
   })(req, res)
 );

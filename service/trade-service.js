@@ -1,30 +1,20 @@
 const { wrapServiceResult } = require("../utils/common");
 const Trades = require("../models/Trade");
 const messages = require("../utils/messages");
+const { isEmpty } = require("lodash");
 
-const saveUser = async (user) => {
-	if (!user.username) {
-		user.username = user.email;
+const addTrade = async (trade) => {
+	if (isEmpty(trade)) {
+		return wrapServiceResult(null, ["Trade body cannot be empty or null"]);
 	}
-	const userDoc = new Trades(user);
-	const savedUser = await userDoc.save();
-	if (!savedUser) {
-		return wrapServiceResult({}, [messages.USER_CREATION_FAILED]);
+	const newTrade = new Trades(trade);
+	const savedTrade = await newTrade.save();
+	if (!savedTrade) {
+		return wrapServiceResult(null, ["Trade cannot be placed"]);
 	}
-	return wrapServiceResult(savedUser, []);
-};
-
-const getTrades = async (query) => {
-	if (query && query.token) {
-		// fetch from redis
-		return wrapServiceResult([], ["Not implemented yet"]);
-	}
-	const userList = await Trades.find({});
-	return wrapServiceResult(userList, []);
+	return wrapServiceResult(savedTrade, []);
 }
 
 module.exports = {
-	saveUser,
-	getTrades
+	addTrade
 }
-

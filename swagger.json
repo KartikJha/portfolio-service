@@ -1,0 +1,16 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "portfolio-service"
+  },
+  "basePath": "/v1",
+  "schemes": ["http", "https"],
+  "path": {
+    "/trades": {
+			"post": {
+				"description": "fetches all the trades in a paginated manner"
+			}
+		}
+  }
+}

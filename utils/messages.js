@@ -4,5 +4,11 @@ module.exports = {
 	USER_ALREADY_EXISTS: 'User already exists',
 	UNKNOWN_ERROR: 'Unknown error',
 	FAILED_TO_FETCH_USERS: 'Failed to fetch users',
-	SUCCESS: 'Success'
+	FAILED_TO_FETCH: (resource) => `Failed to fetch ${resource}`,
+	SUCCESS: 'Success',
+	TRADE_FAILED: 'Trade failed',
+	TRADE_PLACED: 'Trade placed',
+	SHOULD_BE_POSITIVE: (resource) => `${resource} should be >= 0`,
+	CANNOT_BE_EMPTY: (resource) => `${resource} cannot be empty or null`,
+	FAILED_TO_ADD: (resource) => `Failed to add ${resource}`,
 }
