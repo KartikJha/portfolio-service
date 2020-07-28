@@ -1,7 +1,7 @@
 var express = require("express");
 const logger = require("../utils/logger");
 var router = express.Router();
-const userService = require("../service/user-service");
+const tradeService = require("../service/trade-service");
 const { withFailSafe, sendResponse } = require("../utils/common");
 const messages = require("../utils/messages");
 const { isEmpty } = require("lodash");
@@ -12,7 +12,7 @@ router.get("/", (req, res) =>
     [],
     messages.FAILED_TO_FETCH_USERS
   )(async (req, res) => {
-    const { value, errors } = await userService.getUsers(req.query);
+    const { value, errors } = await tradeService.getUsers(req.query);
     if (isEmpty(errors)) {
       return sendResponse(res, 200, messages.SUCCESS, {}, [], value);
     }
@@ -25,7 +25,7 @@ router.post("/", (req, res) =>
     {},
     messages.USER_CREATION_FAILED
   )(async (req, res) => {
-    const { value, errors } = await userService.saveUser(req.body);
+    const { value, errors } = await tradeService.saveUser(req.body);
     if (isEmpty(errors)) {
       return sendResponse(res, 201, messages.USER_CREATED, {}, [], value);
     }

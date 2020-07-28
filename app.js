@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var tradeRouter = require('./routes/trade');
 var initDb = require('./utils/init-db');
 
 var { graphqlHTTP } = require('express-graphql');
@@ -34,7 +34,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/trade', tradeRouter)
+// app.use('/portfolio', portfolioRouter)
+// app.use('/stocks', stocksRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
