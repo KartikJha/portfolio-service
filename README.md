@@ -97,6 +97,10 @@ curl --location --request PATCH 'ec2-54-70-110-211.us-west-2.compute.amazonaws.c
         }
     ]
 }'
+
+8. GET API DOC
+
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/api-docs'
 ````
 
 
