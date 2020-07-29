@@ -3,5 +3,9 @@ module.exports = {
 		STOCK: 'stock',
 		TRADE: 'trade',
 		PORTFOLIO: 'portfolio'
+	},
+	tradeType: {
+		BUY: 'Buy',
+		SELL: 'Sell'
 	}
 }

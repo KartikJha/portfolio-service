@@ -25,11 +25,11 @@ router.post("/", (req, res) =>
     null,
     messages.TRADE_FAILED
   )(async (req, res) => {
-    const { value, errors } = await tradeService.addTrade(req.body);
+    const { value, errors } = await tradeService.addTrade(req.body, req.user);
     if (isEmpty(errors)) {
       return sendResponse(res, 201, messages.TRADE_PLACED, {}, [], value);
     }
-    return sendResponse(res, 500, messages.UNKNOWN_ERROR, {}, errors, {});
+    return sendResponse(res, 400, "", {}, errors, {});
   })(req, res)
 );
 

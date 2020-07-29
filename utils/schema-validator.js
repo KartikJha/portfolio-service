@@ -1,4 +1,4 @@
-const isPositiveNumber = (val) => val >= 0;
+const isPositiveNumber = (val) => val > 0;
 
 module.exports = {
 	isPositiveNumber

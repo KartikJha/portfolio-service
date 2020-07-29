@@ -1,5 +1,5 @@
 const getMockUser = () => ({
-	userId: 1,
+	id: 1,
 	email: "test@gmail.com",
 });
 

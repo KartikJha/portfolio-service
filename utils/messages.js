@@ -11,4 +11,5 @@ module.exports = {
 	SHOULD_BE_POSITIVE: (resource) => `${resource} should be >= 0`,
 	CANNOT_BE_EMPTY: (resource) => `${resource} cannot be empty or null`,
 	FAILED_TO_ADD: (resource) => `Failed to add ${resource}`,
+	STOCK_TRADE_AVAILABILITY: (avail, target) => `Available ${avail}, trying to sell ${target}`
 }
