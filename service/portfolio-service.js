@@ -5,12 +5,13 @@ const { isEmpty, get } = require("lodash");
 const { entity } = require("../constants");
 const stockService = require("./stock-service");
 
-const addPortfolios = async (portfolio) => {
+const addPortfolios = async (portfolio, user) => {
   if (isEmpty(portfolio)) {
     return wrapServiceResult(null, [
       messages.CANNOT_BE_EMPTY(entity.PORTFOLIO),
     ]);
   }
+  portfolio.userId = user;
   const newPortfolio = new Portfolios(portfolio);
   const savedPortfolio = await newPortfolio.save();
   if (!savedPortfolio) {
@@ -78,9 +79,47 @@ const getPortfolioStock = (stock, trade, oldQuantity, oldAvgPrice, isSell) => {
   };
 };
 
+const updatePortfolios = async (portfolioUpdatePayload) => {
+  const portfolio = await Portfolios.findById(portfolioUpdatePayload._id);
+  if (!portfolio) {
+    return wrapServiceResult(null, [
+      messages.FAILED_TO_FETCH(entity.PORTFOLIO),
+    ]);
+  }
+  if (!isEmpty(portfolioUpdatePayload.stocks)) {
+    return wrapServiceResult(null, [
+      messages.UPDATE_FAILED(entity.PORTFOLIO),
+      "Stocks cannot be updated directly",
+    ]);
+  }
+  const updatedPortfolio = await portfolio.save({
+    ...portfolio.toObject(),
+    ...portfolioUpdatePayload,
+  });
+  if (!updatedPortfolio) {
+    return wrapServiceResult(null, [messages.UPDATE_FAILED(entity.PORTFOLIO)]);
+  }
+  return wrapServiceResult(updatedPortfolio, []);
+};
+
+const getPortfolioById = async (portfolioId, user) => {
+  let isValid = await isValidUser(user, portfolioId);
+  // can be modified to use portfolioId and user as filter then we don't need to valiate every time we access a portfolio
+  if (!isValid) {
+    return wrapServiceResult(null, "User cannot read this portfolio");
+  }
+  const portfolio = await Portfolios.findById(portfolioId);
+  if (!portfolio) {
+    return wrapServiceResult(null, messages.FAILED_TO_FETCH(entity.PORTFOLIO));
+  }
+  return wrapServiceResult(portfolio, []);
+};
+
 module.exports = {
   addPortfolios,
   isValidUser,
   getAvailableStock,
   addTradeToPortfolio,
+  updatePortfolios,
+  getPortfolioById,
 };

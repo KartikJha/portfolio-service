@@ -11,5 +11,8 @@ module.exports = {
 	SHOULD_BE_POSITIVE: (resource) => `${resource} should be >= 0`,
 	CANNOT_BE_EMPTY: (resource) => `${resource} cannot be empty or null`,
 	FAILED_TO_ADD: (resource) => `Failed to add ${resource}`,
-	STOCK_TRADE_AVAILABILITY: (avail, target) => `Available ${avail}, trying to sell ${target}`
+	STOCK_TRADE_AVAILABILITY: (avail, target) => `Available ${avail}, trying to sell ${target}`,
+	UPDATE_FAILED: (resource) => `${resource} update failed`,
+	ID_REQUIRED_FOR_UPDATE: (resource) => `ID required for ${resource} update`,
+	ID_REQUIRED_FOR_FETCH: resource => `ID required for ${resource} fetch`
 }

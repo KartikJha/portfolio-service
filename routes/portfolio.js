@@ -6,6 +6,7 @@ const { withFailSafe, sendResponse } = require("../utils/common");
 const messages = require("../utils/messages");
 const { isEmpty } = require("lodash");
 const { entity } = require("../constants");
+const tradeService = require("../service/trade-service");
 
 /* GET users listing. */
 router.get("/", (req, res) =>
@@ -22,7 +23,10 @@ router.post("/", (req, res) =>
     null,
     messages.FAILED_TO_ADD(entity.PORTFOLIO)
   )(async (req, res) => {
-    const { value, errors } = await portfolioService.addPortfolios(req.body);
+    const { value, errors } = await portfolioService.addPortfolios(
+      req.body,
+      req.user
+    );
     if (isEmpty(errors)) {
       return sendResponse(res, 201, messages.SUCCESS, {}, [], value);
     }
@@ -30,4 +34,78 @@ router.post("/", (req, res) =>
   })(req, res)
 );
 
+router.patch("/", (req, res) =>
+  withFailSafe(
+    null,
+    messages.UPDATE_FAILED(entity.PORTFOLIO)
+  )(async (req, res) => {
+    const portfolio = req.body;
+    if (!portfolio._id) {
+      return sendResponse(
+        res,
+        400,
+        "",
+        {},
+        [messages.ID_REQUIRED_FOR_UPDATE(entity.PORTFOLIO)],
+        {}
+      );
+    }
+    const { value, errors } = await portfolioService.updatePortfolios(req.body);
+    if (isEmpty(errors)) {
+      return sendResponse(res, 200, messages.SUCCESS, {}, [], value);
+    }
+    return sendResponse(res, 400, "", {}, errors, {});
+  })(req, res)
+);
+
+router.get("/:portfolioId", (req, res) =>
+  withFailSafe(
+    null,
+    messages.FAILED_TO_FETCH(entity.PORTFOLIO)
+  )(async (req, res) => {
+    const { portfolioId } = req.params;
+    if (!portfolioId) {
+      return sendResponse(
+        res,
+        400,
+        "",
+        {},
+        [messages.ID_REQUIRED_FOR_FETCH(entity.PORTFOLIO)],
+        {}
+      );
+    }
+    const { value, errors } = await portfolioService.getPortfolioById(
+      portfolioId,
+      req.user
+    );
+    if (!isEmpty(errors)) {
+      return sendResponse(
+        res,
+        500,
+        message.FAILED_TO_FETCH(entity.PORTFOLIO),
+        {},
+        errors,
+        null
+      );
+    }
+    const {
+      value: tradeList,
+      errors: tradeFetchErrors,
+    } = await tradeService.getTradeByPortfolioId(portfolioId);
+    if (!isEmpty(tradeFetchErrors)) {
+      return sendResponse(
+        res,
+        500,
+        [messages.FAILED_TO_FETCH(entity.TRADE)],
+        {},
+        tradeFetchErrors,
+        null
+      );
+    }
+    return sendResponse(res, 200, messages.SUCCESS, {}, [], {
+      ...value.toObject(),
+      tradeList,
+    });
+  })(req, res)
+);
 module.exports = router;
