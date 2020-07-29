@@ -34,14 +34,83 @@ This is the used approach as trade volume can be very large and may need streami
 2. Approriate referential integrity and schema validations have been placed for maintaining data sanity
 3. Application is built using node.js, express and hosted on AWS.
 4. Swagger documentation has also been integrated and can be accessed via http://ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/api-docs/#/ it is not complete yet but the API can be accessed via post man
-4. Base path for all routes is http://ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/
-
+4. Base path for all routes is http://ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/ <br />
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/6388b607a1fda7d411ba)
+5. API REFERENCE
+```` 
+1. ADD TRADE
+
+curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/trades' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "userId": "1",
+    "stockId": "1",
+    "quantity": 123,
+    "type": "Buy",
+    "portfolioId": "1"
+}'
+
+2. ADD STOCK
+
+curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/stocks' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "ticker": "WIPRO",
+    "currentPrice": 123,
+    "quantity": 40
+}'
+
+3. ADD PORTFOLIO
+
+curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Test portfolio",
+    "stocks": [],
+    "userId": 1
+}'
+
+4. FETCH PORTFOLIO
+
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f207b0576beaf081ccfac33'
+
+5. FETCH HOLDINGS
+
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f214cd92f5d3a093f081f87/holdings'
+
+6. FETCH RETURNS
+
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f214cd92f5d3a093f081f87/returns'
+
+7. UPDATE PORTFOLIOS
+
+curl --location --request PATCH 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "_id": "5f207b0576beaf081ccfac33",
+    "stocks": [
+        {
+            "ticker": "IPRO",
+            "quantity": 2,
+            "price": 123,
+            "stockId": "5f209e4b7e5bd751ed5de4eb"
+        }
+    ]
+}'
+````
+
+
 
 #### Improvements
 
 1. The add trade API can be updated to use kafka as a streaming addon for background processing of trades
 2. This will allow scheduling trades and conditional buying
+
+#### Assumptions
+1. Updation and removal of trade is not implemented as a trade is assumed an atomic operation.
+2. Securities are added and removed from the portfolio based on trades performed
+
+
 
 
 
