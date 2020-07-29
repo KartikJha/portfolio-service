@@ -2,7 +2,7 @@ const { wrapServiceResult } = require("../utils/common");
 const Portfolios = require("../models/Portfolio");
 const messages = require("../utils/messages");
 const { isEmpty, get, wrap } = require("lodash");
-const { entity } = require("../constants");
+const { entity, tradeType } = require("../constants");
 const stockService = require("./stock-service");
 
 const addPortfolios = async (portfolio, user) => {
@@ -46,18 +46,19 @@ const addTradeToPortfolio = async (trade) => {
     return wrapServiceResult(null, [
       messages.FAILED_TO_FETCH(entity.PORTFOLIO),
     ]);
-  }
+	}
+	const otherStocks = portfolio.stocks.filter((s) => trade.stockId != s.stockId);
   const [stock] = portfolio.stocks.filter((s) => trade.stockId == s.stockId);
   // this stock doesn't exists yet
   if (isEmpty(stock)) {
     let { value: newStock, errors } = await stockService.getStockById(
       trade.stockId
     );
-    portfolio.stocks = [getPortfolioStock(newStock, trade, 0, 0)];
+    portfolio.stocks = [...otherStocks, getPortfolioStock(newStock, trade, 0, 0, trade.type == tradeType.SELL)];
   } else {
     portfolio.stocks = [
-      ...portfolio.stocks,
-      getPortfolioStock(stock, trade, stock.quantity, stock.price),
+      ...otherStocks,
+      getPortfolioStock(stock, trade, stock.quantity, stock.price,trade.type == tradeType.SELL),
     ];
   }
   const savedPortfolio = await portfolio.save();
@@ -70,12 +71,12 @@ const addTradeToPortfolio = async (trade) => {
 const getPortfolioStock = (stock, trade, oldQuantity, oldAvgPrice, isSell) => {
   return {
     ticker: stock.ticker,
-    quantity: isSell ? oldQuantity - trade.price : oldQuantity + trade.price,
+    quantity: isSell ? oldQuantity - trade.quantity : oldQuantity + trade.quantity,
     price: isSell
       ? oldAvgPrice
       : (oldQuantity * oldAvgPrice + trade.price * trade.quantity) /
         (oldQuantity + trade.quantity),
-    stockId: stock.stockId,
+    stockId: stock.stockId || stock.id, // handling new and old cases
   };
 };
 

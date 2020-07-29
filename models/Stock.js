@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 
 var stockSchema = new Schema({
 	ticker:  { type: String, unique: true, required: true },
-	currentPrice: { type: String, required: true, validate: {
+	currentPrice: { type: Number, required: true, validate: {
 		validator: isPositiveNumber,
 		message: messages.SHOULD_BE_POSITIVE
 	}},

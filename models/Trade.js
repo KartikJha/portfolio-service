@@ -15,7 +15,7 @@ var tradeSchema = new Schema({
     },
   },
   price: {
-    type: String,
+    type: Number,
     required: true,
     validate: {
       validator: isPositiveNumber,

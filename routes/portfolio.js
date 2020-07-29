@@ -82,7 +82,7 @@ router.get("/:portfolioId", (req, res) =>
       return sendResponse(
         res,
         500,
-        message.FAILED_TO_FETCH(entity.PORTFOLIO),
+        messages.FAILED_TO_FETCH(entity.PORTFOLIO),
         {},
         errors,
         null
@@ -163,7 +163,7 @@ router.get("/:portfolioId/returns", (req, res) =>
       portfolioId,
       req.user
     );
-    if (!isEmpty(errors)) {s
+    if (!isEmpty(errors)) {
       return sendResponse(
         res,
         500,
