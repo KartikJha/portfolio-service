@@ -24,7 +24,7 @@ const addTrade = async (trade, user) => {
         messages.STOCK_TRADE_AVAILABILITY(availableStocks, trade.quantity),
       ]);
   }
-  const newTrade = new Trades({ ...trade, userId: user });
+  const newTrade = new Trades({ ...trade, userId: user.id });
   const savedTrade = await newTrade.save();
   if (!savedTrade) {
     return wrapServiceResult(null, ["Trade cannot be placed"]);

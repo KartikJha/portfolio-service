@@ -133,7 +133,7 @@ router.get("/:portfolioId/holdings", (req, res) =>
       return sendResponse(
         res,
         500,
-        message.FAILED_TO_FETCH(entity.PORTFOLIO),
+        messages.FAILED_TO_FETCH(entity.PORTFOLIO),
         {},
         errors,
         null
@@ -163,11 +163,11 @@ router.get("/:portfolioId/returns", (req, res) =>
       portfolioId,
       req.user
     );
-    if (!isEmpty(errors)) {
+    if (!isEmpty(errors)) {s
       return sendResponse(
         res,
         500,
-        message.FAILED_TO_FETCH(entity.PORTFOLIO),
+        messages.FAILED_TO_FETCH(entity.PORTFOLIO),
         {},
         errors,
         null

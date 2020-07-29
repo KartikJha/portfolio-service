@@ -11,7 +11,7 @@ const addPortfolios = async (portfolio, user) => {
       messages.CANNOT_BE_EMPTY(entity.PORTFOLIO),
     ]);
   }
-  portfolio.userId = user;
+  portfolio.userId = user.id;
   const newPortfolio = new Portfolios(portfolio);
   const savedPortfolio = await newPortfolio.save();
   if (!savedPortfolio) {
