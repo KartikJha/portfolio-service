@@ -44,10 +44,11 @@ curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.co
 --header 'Content-Type: application/json' \
 --data-raw '{
     "userId": "1",
-    "stockId": "1",
-    "quantity": 123,
+    "stockId": "5f216912d3c7610c33ce1c1e",
+    "quantity": 1190,
     "type": "Buy",
-    "portfolioId": "1"
+    "portfolioId": "5f2167f4d3c7610c33ce1c19",
+    "price": 190
 }'
 
 2. ADD STOCK
@@ -55,39 +56,39 @@ curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.co
 curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/stocks' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "ticker": "WIPRO",
+    "ticker": "TWO",
     "currentPrice": 123,
     "quantity": 40
 }'
 
 3. ADD PORTFOLIO
 
-curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios' \
+curl --location --request POST 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "name": "Test portfolio",
+    "name": "TEST P 1",
     "stocks": [],
-    "userId": 1
+    "userId": "1"
 }'
 
 4. FETCH PORTFOLIO
 
-curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f207b0576beaf081ccfac33'
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f2167f4d3c7610c33ce1c19'
 
 5. FETCH HOLDINGS
 
-curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f214cd92f5d3a093f081f87/holdings'
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f2167f4d3c7610c33ce1c19/holdings'
 
 6. FETCH RETURNS
 
-curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f214cd92f5d3a093f081f87/returns'
+curl --location --request GET 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios/5f2167f4d3c7610c33ce1c19/returns'
 
 7. UPDATE PORTFOLIOS
 
 curl --location --request PATCH 'ec2-54-70-110-211.us-west-2.compute.amazonaws.com:4600/v1/portfolios' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "_id": "5f207b0576beaf081ccfac33",
+    "_id": "5f2167f4d3c7610c33ce1c19",
     "stocks": [
         {
             "ticker": "IPRO",
