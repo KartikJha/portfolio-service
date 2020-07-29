@@ -1,7 +1,7 @@
 const { wrapServiceResult } = require("../utils/common");
 const Portfolios = require("../models/Portfolio");
 const messages = require("../utils/messages");
-const { isEmpty, get } = require("lodash");
+const { isEmpty, get, wrap } = require("lodash");
 const { entity } = require("../constants");
 const stockService = require("./stock-service");
 
@@ -115,11 +115,29 @@ const getPortfolioById = async (portfolioId, user) => {
   return wrapServiceResult(portfolio, []);
 };
 
+const calculateReturns = (stocks) => {
+	let result = 0
+	for (let i = 0; i < stocks.length; i++) {
+		result += ((100 - stocks[i].price) * stocks[i].quantity)
+	}
+	return result;
+}
+
+const getPortfolioReturn = async (portfolioId, user) => {
+	const {value, errors } = await getPortfolioById(portfolioId, user);
+	if (!isEmpty(errors)) {
+		return wrapServiceResult(null, errors);
+	}
+	const returns =  calculateReturns(value.stocks);
+	return wrapServiceResult(returns, []);
+}
+
 module.exports = {
   addPortfolios,
   isValidUser,
   getAvailableStock,
   addTradeToPortfolio,
   updatePortfolios,
-  getPortfolioById,
+	getPortfolioById,
+	getPortfolioReturn
 };

@@ -108,4 +108,72 @@ router.get("/:portfolioId", (req, res) =>
     });
   })(req, res)
 );
+
+router.get("/:portfolioId/holdings", (req, res) =>
+  withFailSafe(
+    null,
+    "Failed to fetch portfolio holdings"
+  )(async (req, res) => {
+    const { portfolioId } = req.params;
+    if (!portfolioId) {
+      return sendResponse(
+        res,
+        400,
+        "",
+        {},
+        [messages.ID_REQUIRED_FOR_FETCH(entity.PORTFOLIO)],
+        {}
+      );
+    }
+    const { value, errors } = await portfolioService.getPortfolioById(
+      portfolioId,
+      req.user
+    );
+    if (!isEmpty(errors)) {
+      return sendResponse(
+        res,
+        500,
+        message.FAILED_TO_FETCH(entity.PORTFOLIO),
+        {},
+        errors,
+        null
+      );
+    }
+    return sendResponse(res, 200, messages.SUCCESS, {}, [], value.stocks);
+  })(req, res)
+);
+
+router.get("/:portfolioId/returns", (req, res) =>
+  withFailSafe(
+    null,
+    "Failed to fetch portfolio returns"
+  )(async (req, res) => {
+    const { portfolioId } = req.params;
+    if (!portfolioId) {
+      return sendResponse(
+        res,
+        400,
+        "",
+        {},
+        [messages.ID_REQUIRED_FOR_FETCH(entity.PORTFOLIO)],
+        {}
+      );
+    }
+    const { value, errors } = await portfolioService.getPortfolioReturn(
+      portfolioId,
+      req.user
+    );
+    if (!isEmpty(errors)) {
+      return sendResponse(
+        res,
+        500,
+        message.FAILED_TO_FETCH(entity.PORTFOLIO),
+        {},
+        errors,
+        null
+      );
+    }
+    return sendResponse(res, 200, messages.SUCCESS, {}, [], value);
+  })(req, res)
+);
 module.exports = router;
